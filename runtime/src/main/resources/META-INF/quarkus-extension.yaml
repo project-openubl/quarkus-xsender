@@ -1,6 +1,6 @@
 name: Quarkus Xsender
-#description: Quarkus Xsender ...
-metadata:
+description: Quarkus Xsender library
+#metadata:
 #  keywords:
 #    - quarkus-xsender
 #  guide: ...

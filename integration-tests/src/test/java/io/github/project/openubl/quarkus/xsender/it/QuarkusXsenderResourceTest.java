@@ -16,6 +16,6 @@ public class QuarkusXsenderResourceTest {
                 .when().get("/quarkus-xsender")
                 .then()
                 .statusCode(200)
-                .body(is("Hello quarkus-xsender"));
+                .body(is("ACEPTADO"));
     }
 }
