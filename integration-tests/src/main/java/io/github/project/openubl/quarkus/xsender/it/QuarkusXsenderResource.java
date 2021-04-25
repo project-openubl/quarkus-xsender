@@ -16,17 +16,46 @@
 */
 package io.github.project.openubl.quarkus.xsender.it;
 
+import io.github.project.openubl.xsender.XSender;
+import io.github.project.openubl.xsender.XSenderFileResponse;
+import io.github.project.openubl.xsender.company.CompanyCredentials;
+import io.github.project.openubl.xsender.company.CompanyCredentialsBuilder;
+import io.github.project.openubl.xsender.company.CompanyURLs;
+import io.github.project.openubl.xsender.company.CompanyURLsBuilder;
+import io.github.project.openubl.xsender.discovery.FileAnalyzer;
+import io.github.project.openubl.xsender.discovery.XMLFileAnalyzer;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import java.io.InputStream;
 
 @Path("/quarkus-xsender")
 @ApplicationScoped
 public class QuarkusXsenderResource {
-    // add some rest methods here
 
     @GET
-    public String hello() {
-        return "Hello quarkus-xsender";
+    public String hello() throws Exception {
+        // On for company
+        CompanyURLs companyURLs = CompanyURLsBuilder.aCompanyURLs()
+                .withInvoice("https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService")
+                .withDespatch("https://e-beta.sunat.gob.pe/ol-ti-itemision-otroscpe-gem-beta/billService")
+                .withPerceptionRetention("https://e-beta.sunat.gob.pe/ol-ti-itemision-guia-gem-beta/billService")
+                .build();
+
+        CompanyCredentials credentials = CompanyCredentialsBuilder.aCompanyCredentials()
+                .withUsername("12345678959MODDATOS")
+                .withPassword("MODDATOS")
+                .build();
+
+        // Using the facade
+        InputStream is = QuarkusXsenderResource.class.getClassLoader().getResourceAsStream("META-INF/resources/invoice.xml");
+        FileAnalyzer fileAnalyzer = new XMLFileAnalyzer(is, companyURLs);
+
+        XSenderFileResponse fileResponse = XSender.getInstance()
+                .sendXmlFile(fileAnalyzer.getZipFile(), fileAnalyzer.getFileDeliveryTarget(), credentials);
+
+        return fileResponse.getCdrReader().getCdrStatus().get().toString();
     }
+
 }
