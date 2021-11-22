@@ -30,7 +30,7 @@
         <quarkus.version>1.13.2.Final</quarkus.version>
         <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
 
-        <quarkus.cxf.version>0.5</quarkus.cxf.version>
+        <quarkus.cxf.version>0.11.0</quarkus.cxf.version>
         <xsender.version>4.0.0-SNAPSHOT</xsender.version>
     </properties>
 
